@@ -1,18 +1,18 @@
 import { HardhatUserConfig } from "hardhat/config";
 import 'dotenv/config'
-import '@nomiclabs/hardhat-ethers';
 import "@nomicfoundation/hardhat-toolbox";
+import '@typechain/hardhat'
+import '@nomicfoundation/hardhat-ethers'
+import '@nomicfoundation/hardhat-chai-matchers'
 
 const config: HardhatUserConfig = {
   solidity: "0.8.20",
-  defaultNetwork: "goerli",
+  defaultNetwork: "hardhat",
+  typechain: {
+    outDir: "typechain-types",
+    target: "ethers-v6"
+  },
   networks: {
-    hardhat: {
-      forking: {
-        url: "https://eth-mainnet.g.alchemy.com/v2/EJlARqSMu_HlwPbVinJu2tOqsYAp2oSY",
-      },
-      allowUnlimitedContractSize: true
-    },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/yJ7nlf6NKvqagb4hA3CFl2Ht4msuwljA`,
       accounts: [String(process.env.GOERLI_PRIVATE_KEY)]

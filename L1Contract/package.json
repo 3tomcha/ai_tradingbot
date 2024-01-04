@@ -9,7 +9,6 @@
   "dependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "@openzeppelin/contracts": "^5.0.1",
-    "@typechain/hardhat": "^9.1.0",
     "abstract-level": "^1.0.3",
     "adm-zip": "^0.4.16",
     "aes-js": "^3.0.0",
@@ -212,11 +211,14 @@
     "yocto-queue": "^0.1.0"
   },
   "devDependencies": {
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
     "@uniswap/sdk": "^3.0.3",
     "@uniswap/v3-core": "^1.0.1",
     "@uniswap/v3-periphery": "^1.4.4",
     "hardhat": "^2.19.4",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "typechain": "^8.3.2"
   },
   "scripts": {
     "test": "mocha"
