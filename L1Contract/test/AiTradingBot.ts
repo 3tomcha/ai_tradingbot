@@ -2,6 +2,10 @@ import { describe } from "node:test";
 import { ethers } from "hardhat";
 
 describe("AI Trading Bot", () => {
+  const deployFixture = async () => {
+    const { owner, otherAccount } = await ethers.getSigners();
+  }
+
   it("Should be able to deploy the contract", async () => {
     const AiTradingBot = await ethers.getContractFactory("AiTradingBot");
     const aiTradingBot = await AiTradingBot.deploy();

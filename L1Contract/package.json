@@ -7,6 +7,9 @@
     "test": "test"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.1",
+    "@typechain/hardhat": "^9.1.0",
     "abstract-level": "^1.0.3",
     "adm-zip": "^0.4.16",
     "aes-js": "^3.0.0",
@@ -70,7 +73,7 @@
     "ethereum-cryptography": "^1.2.0",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^6.2.1",
-    "ethers": "^5.7.2",
+    "ethers": "^6.9.2",
     "ethjs-util": "^0.1.6",
     "evp_bytestokey": "^1.0.3",
     "fill-range": "^7.0.1",
@@ -209,7 +212,9 @@
     "yocto-queue": "^0.1.0"
   },
   "devDependencies": {
-    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@uniswap/sdk": "^3.0.3",
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.4",
     "hardhat": "^2.19.4",
     "mocha": "^10.2.0"
   },
