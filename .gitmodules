@@ -10,3 +10,6 @@
 [submodule "L1Contract/lib/v3-periphery"]
 	path = L1Contract/lib/v3-periphery
 	url = https://github.com/uniswap/v3-periphery
+[submodule "L1Contract/lib/v3-core"]
+	path = L1Contract/lib/v3-core
+	url = https://github.com/uniswap/v3-core
