@@ -4,6 +4,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 
+enum TokenType {
+    USDC,
+    WETH
+}
+
 interface IStarknetCore {
     function sendMessageToL2(
         uint256 toAddress,
@@ -47,5 +52,8 @@ contract AiTradingBot is Ownable {
         currentAmountUSDC = 0;
         currentAmountWEth = 0;
     }
+
     // function withdrawl() {}
+
+    function addFunds(TokenType tokenType, uint amount) external {}
 }
