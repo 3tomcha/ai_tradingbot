@@ -1,0 +1,3 @@
+[submodule "ai_tradingbot/lib/forge-std"]
+	path = ai_tradingbot/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
