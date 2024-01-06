@@ -1,5 +1,5 @@
-import { AiTradingBot__factory } from './../typechain-types/factories/contracts/AiTradingBot.sol/AiTradingBot__factory';
-import { SimpleERC20__factory } from './../typechain-types/factories/contracts/USDC.sol/SimpleERC20__factory';
+import { AiTradingBot__factory } from '../typechain-types/factories/contracts/AiTradingBot.sol/AiTradingBot__factory';
+import { SimpleERC20__factory } from '../typechain-types/factories/contracts/USDC.sol/SimpleERC20__factory';
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
