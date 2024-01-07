@@ -13,17 +13,12 @@ contract AiTradingBotTest is Test {
     IERC20 public immutable weth;
 
     uint256 l2ContractAddress = 0xF;
-    // IStarknetCore uniswapRouter = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
-    // IERC20 starknetCore = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
-    // IERC20 usdcAddress = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
-    // address wethAddress = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
-
+    MockUSDC public usdc;
     uint256 initialAmount = 5_000_000;
 
     function setUp() public {
         address owner = address(this);
-        MockUSDC usdc = new MockUSDC("USDC", "USDC", 1000 * 1e6);
-
+        usdc = new MockUSDC("USDC", "USDC", 1000 * 1e6);
         aiTradingBot = new AiTradingBot(
             l2ContractAddress,
             swapRouter,
@@ -32,12 +27,11 @@ contract AiTradingBotTest is Test {
             weth,
             owner
         );
+        usdc.approve(address(aiTradingBot), initialAmount);
         aiTradingBot.addFunds(TokenType.USDC, initialAmount);
     }
 
     function test_SetUp() public {
-        console2.logUint(1);
-        // console2.logUint(aiTradingBot.currentAmountUSDC());
-        // assertEq(aiTradingBot.currentAmountUSDC(), initialAmount);
+        assertEq(aiTradingBot.currentAmountUSDC(), initialAmount);
     }
 }
