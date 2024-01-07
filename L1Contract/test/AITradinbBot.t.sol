@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Test, console2} from "../lib/forge-std/src/Test.sol";
+import {Test, console2, console} from "../lib/forge-std/src/Test.sol";
 import {AiTradingBot, TokenType, IStarknetCore, IERC20} from "../src/AiTradingBot.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import {MockUSDC} from "../src/MockUSDC.sol";
@@ -15,9 +15,9 @@ contract AiTradingBotTest is Test {
     uint256 l2ContractAddress = 0xF;
     MockUSDC public usdc;
     uint256 initialAmount = 5_000_000;
+    address owner = address(this);
 
     function setUp() public {
-        address owner = address(this);
         usdc = new MockUSDC("USDC", "USDC", 1000 * 1e6);
         aiTradingBot = new AiTradingBot(
             l2ContractAddress,
@@ -32,6 +32,22 @@ contract AiTradingBotTest is Test {
     }
 
     function test_SetUp() public {
+        assertEq(usdc.balanceOf(address(aiTradingBot)), initialAmount);
         assertEq(aiTradingBot.currentAmountUSDC(), initialAmount);
+    }
+
+    function test_Transaction() public {
+        uint256 newAmount = 5_000_000;
+        address otherAccount = vm.addr(2);
+        vm.prank(owner);
+        usdc.transfer(otherAccount, newAmount);
+        vm.prank(otherAccount);
+        usdc.approve(address(aiTradingBot), newAmount);
+        vm.prank(otherAccount);
+        aiTradingBot.addFunds(TokenType.USDC, newAmount);
+        assertEq(
+            usdc.balanceOf(address(aiTradingBot)),
+            initialAmount + newAmount
+        );
     }
 }
