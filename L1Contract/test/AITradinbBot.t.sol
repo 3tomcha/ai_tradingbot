@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Test, console2, console} from "../lib/forge-std/src/Test.sol";
-import {AiTradingBot, TokenType, IStarknetCore, IERC20} from "../src/AiTradingBot.sol";
+import {AiTradingBot, TokenType, IStarknetCore, IERC20, Ownable} from "../src/AiTradingBot.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import {MockUSDC} from "../src/MockUSDC.sol";
 
@@ -50,9 +50,21 @@ contract AiTradingBotTest is Test {
         );
     }
 
-    function test_withdraw() public {
+    function test_owner_withdraw() public {
         aiTradingBot.withdrawl(TokenType.USDC, initialAmount);
         assertEq(usdc.balanceOf(address(aiTradingBot)), 0);
         assertEq(aiTradingBot.currentAmountUSDC(), 0);
+    }
+
+    function test_otherAccount_withdraw() public {
+        address otherAccount = vm.addr(2);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Ownable.OwnableUnauthorizedAccount.selector,
+                otherAccount
+            )
+        );
+        vm.prank(otherAccount);
+        aiTradingBot.withdrawl(TokenType.USDC, initialAmount);
     }
 }
