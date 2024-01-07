@@ -39,7 +39,6 @@ contract AiTradingBotTest is Test {
     function test_Transaction() public {
         uint256 newAmount = 5_000_000;
         address otherAccount = vm.addr(2);
-        vm.prank(owner);
         usdc.transfer(otherAccount, newAmount);
         vm.prank(otherAccount);
         usdc.approve(address(aiTradingBot), newAmount);
@@ -49,5 +48,11 @@ contract AiTradingBotTest is Test {
             usdc.balanceOf(address(aiTradingBot)),
             initialAmount + newAmount
         );
+    }
+
+    function test_withdraw() public {
+        aiTradingBot.withdrawl(TokenType.USDC, initialAmount);
+        assertEq(usdc.balanceOf(address(aiTradingBot)), 0);
+        assertEq(aiTradingBot.currentAmountUSDC(), 0);
     }
 }

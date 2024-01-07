@@ -53,7 +53,15 @@ contract AiTradingBot is Ownable {
         currentAmountWEth = 0;
     }
 
-    // function withdrawl() {}
+    function withdrawl(TokenType tokenType, uint amount) external onlyOwner {
+        if (tokenType == TokenType.USDC) {
+            usdc.transfer(msg.sender, amount);
+            currentAmountUSDC -= amount;
+        } else if (tokenType == TokenType.WETH) {
+            usdc.transfer(msg.sender, amount);
+            currentAmountWEth -= amount;
+        }
+    }
 
     function addFunds(TokenType tokenType, uint amount) external {
         if (tokenType == TokenType.USDC) {
