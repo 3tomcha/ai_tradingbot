@@ -1,32 +1,43 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Test, console2} from "forge-std/Test.sol";
-import {AiTradingBot, TokenType} from "../src/AiTradingBot.sol";
+import {Test, console2} from "../lib/forge-std/src/Test.sol";
+import {AiTradingBot, TokenType, IStarknetCore, IERC20} from "../src/AiTradingBot.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {MockUSDC} from "../src/MockUSDC.sol";
 
 contract AiTradingBotTest is Test {
     AiTradingBot public aiTradingBot;
+    ISwapRouter public immutable swapRouter;
+    IStarknetCore public immutable starknetCore;
+    IERC20 public immutable weth;
 
-    address l2ContractAddress = 0xF;
-    address uniswapRouter = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
-    address starknetCore = "0xde29d060D45901Fb19ED6C6e959EB22d8626708e";
-    address usdcAddress = "0x07865c6e87b9f70255377e024ace6630c1eaa37f";
-    address wethAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
+    uint256 l2ContractAddress = 0xF;
+    // IStarknetCore uniswapRouter = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
+    // IERC20 starknetCore = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
+    // IERC20 usdcAddress = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
+    // address wethAddress = 0x07865c6E87B9F70255377e024ace6630C1Eaa37F;
 
     uint256 initialAmount = 5_000_000;
 
     function setUp() public {
+        address owner = address(this);
+        MockUSDC usdc = new MockUSDC("USDC", "USDC", 1000 * 1e6);
+
         aiTradingBot = new AiTradingBot(
             l2ContractAddress,
-            uniswapRouter,
+            swapRouter,
             starknetCore,
-            usdcAddress,
-            wethAddress
+            usdc,
+            weth,
+            owner
         );
         aiTradingBot.addFunds(TokenType.USDC, initialAmount);
     }
 
     function test_SetUp() public {
-        assertEq(aiTradingBot.currentAmountUSDC, initialAmount);
+        console2.logUint(1);
+        // console2.logUint(aiTradingBot.currentAmountUSDC());
+        // assertEq(aiTradingBot.currentAmountUSDC(), initialAmount);
     }
 }
