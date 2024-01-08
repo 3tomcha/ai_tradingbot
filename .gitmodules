@@ -4,12 +4,3 @@
 [submodule "L1Contract/lib/forge-std"]
 	path = L1Contract/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-[submodule "L1Contract/lib/openzeppelin-contracts"]
-	path = L1Contract/lib/openzeppelin-contracts
-	url = https://github.com/openzeppelin/openzeppelin-contracts
-[submodule "L1Contract/lib/v3-periphery"]
-	path = L1Contract/lib/v3-periphery
-	url = https://github.com/uniswap/v3-periphery
-[submodule "L1Contract/lib/v3-core"]
-	path = L1Contract/lib/v3-core
-	url = https://github.com/uniswap/v3-core
