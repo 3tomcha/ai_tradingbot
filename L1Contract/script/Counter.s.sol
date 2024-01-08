@@ -6,7 +6,7 @@ import {Script, console2} from "forge-std/Script.sol";
 contract CounterScript is Script {
     function setUp() public {}
 
-    function run() public {
+    function run() external {
         vm.broadcast();
     }
 }
