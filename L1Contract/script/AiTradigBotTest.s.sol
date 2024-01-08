@@ -1,86 +1,12 @@
-import {Test, console2, console} from "../lib/forge-std/src/Test.sol";
-import {AiTradingBot, TokenType, IStarknetCore, IERC20, Ownable, TradeInstruction} from "../src/AiTradingBot.sol";
-import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
-import {SwapRouter} from "@uniswap/v3-periphery/contracts/SwapRouter.sol";
-import {MockUSDC} from "../src/MockUSDC.sol";
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
 
-contract AiTradingBotTest is Test {
-    AiTradingBot public aiTradingBot;
-    SwapRouter public immutable swapRouter;
-    IStarknetCore public immutable starknetCore;
-    IERC20 public immutable weth;
+import {Script, console2} from "forge-std/Script.sol";
 
-    uint256 l2ContractAddress = 0xF;
-    MockUSDC public usdc;
-    uint256 initialAmount = 5_000_000;
-    address owner = address(this);
+contract CounterScript is Script {
+    function setUp() public {}
 
-    function setUp() public {
-        usdc = new MockUSDC("USDC", "USDC", 1000 * 1e6);
-        aiTradingBot = new AiTradingBot(
-            l2ContractAddress,
-            swapRouter,
-            starknetCore,
-            usdc,
-            weth,
-            owner
-        );
-        usdc.approve(address(aiTradingBot), initialAmount);
-        aiTradingBot.addFunds(TokenType.USDC, initialAmount);
-    }
-
-    function test_SetUp() public {
-        assertEq(usdc.balanceOf(address(aiTradingBot)), initialAmount);
-        assertEq(aiTradingBot.currentAmountUSDC(), initialAmount);
-    }
-
-    function test_Transaction() public {
-        uint256 newAmount = 5_000_000;
-        address otherAccount = vm.addr(2);
-        usdc.transfer(otherAccount, newAmount);
-        vm.prank(otherAccount);
-        usdc.approve(address(aiTradingBot), newAmount);
-        vm.prank(otherAccount);
-        aiTradingBot.addFunds(TokenType.USDC, newAmount);
-        assertEq(
-            usdc.balanceOf(address(aiTradingBot)),
-            initialAmount + newAmount
-        );
-    }
-
-    function test_owner_withdraw() public {
-        aiTradingBot.withdrawl(TokenType.USDC, initialAmount);
-        assertEq(usdc.balanceOf(address(aiTradingBot)), 0);
-        assertEq(aiTradingBot.currentAmountUSDC(), 0);
-    }
-
-    function test_otherAccount_withdraw() public {
-        address otherAccount = vm.addr(2);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                Ownable.OwnableUnauthorizedAccount.selector,
-                otherAccount
-            )
-        );
-        vm.prank(otherAccount);
-        aiTradingBot.withdrawl(TokenType.USDC, initialAmount);
-    }
-
-    function test_receiveInstruction() public {
-        uint24 tradeAmount = 500_000;
-        aiTradingBot.receiveInstruction(TradeInstruction.BUY, tradeAmount);
-        assertEq(
-            usdc.balanceOf(address(aiTradingBot)),
-            initialAmount - tradeAmount
-        );
-        assertEq(aiTradingBot.currentAmountUSDC(), initialAmount - tradeAmount);
+    function run() public {
+        vm.broadcast();
     }
 }
-
-// contract CounterScript is Script {
-//     function setUp() public {}
-
-//     function run() public {
-//         vm.broadcast();
-//     }
-// }
