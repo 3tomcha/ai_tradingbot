@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
-
 import {Test, console2, console} from "../lib/forge-std/src/Test.sol";
 import {AiTradingBot, TokenType, IStarknetCore, IERC20, Ownable, TradeInstruction} from "../src/AiTradingBot.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
@@ -79,3 +76,11 @@ contract AiTradingBotTest is Test {
         assertEq(aiTradingBot.currentAmountUSDC(), initialAmount - tradeAmount);
     }
 }
+
+// contract CounterScript is Script {
+//     function setUp() public {}
+
+//     function run() public {
+//         vm.broadcast();
+//     }
+// }

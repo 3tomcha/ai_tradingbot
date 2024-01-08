@@ -4,6 +4,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 
+enum TradeInstruction {
+    BUY,
+    SELL
+}
+
 enum TokenType {
     USDC,
     WETH
@@ -33,6 +38,10 @@ contract AiTradingBot is Ownable {
     uint256 public currentAmountUSDC;
     uint256 public currentAmountWEth;
 
+    uint24 public constant poolFee = 3000;
+
+    event executeTrade(TradeInstruction tradeInstruction, uint amount);
+
     constructor(
         uint256 _l2ContractAddress,
         ISwapRouter _swapRouter,
@@ -61,6 +70,42 @@ contract AiTradingBot is Ownable {
             usdc.transfer(msg.sender, amount);
             currentAmountWEth -= amount;
         }
+    }
+
+    function receiveInstruction(
+        TradeInstruction instruction,
+        uint amount
+    ) external onlyOwner {
+        uint256[] memory payload = new uint256[](2);
+        payload[0] = instruction == TradeInstruction.BUY ? 0 : 1;
+        payload[1] = amount;
+
+        starknetCore.consumeMessageFromL2(l2ContractAddress, payload);
+
+        // if (instruction == TradeInstruction.BUY) {
+        //     buyWEth(amount);
+        // } else if (instruction == TradeInstruction.SELL) {
+        //     // sellWEth(amount);
+        // }
+
+        emit executeTrade(instruction, amount);
+    }
+
+    function buyWEth(uint amount) private {
+        usdc.approve(address(swapRouter), amount + 100000);
+        ISwapRouter.ExactInputSingleParams memory params = ISwapRouter
+            .ExactInputSingleParams({
+                tokenIn: address(usdc),
+                tokenOut: address(weth),
+                fee: poolFee,
+                recipient: address(this),
+                deadline: (block.timestamp + 60 * 500),
+                amountIn: amount,
+                amountOutMinimum: 0,
+                sqrtPriceLimitX96: 0
+            });
+        currentAmountUSDC -= amount;
+        currentAmountWEth += swapRouter.exactInputSingle(params);
     }
 
     function addFunds(TokenType tokenType, uint amount) external {
