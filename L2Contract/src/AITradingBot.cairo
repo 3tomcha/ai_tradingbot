@@ -1,23 +1,24 @@
-// @constructor
-// func constructor{
-//     syscall_ptr: felt*,
-//     pederson_ptr: HashBuiltin*,
-//     range_check_ptr
-// }(_owner_address: felt*, _l1_contract_address: felt, amount_usdc_max: felt, amount_usdc_extereme: felt, amount_usdc_large: felt):
-//     owner.write(value=_owner_address);
-// end
+#[starknet::contract]
+mod AITradingBot {
+    #[storage]
+    struct Storage {
+        owner: felt252,
+        l1_contract_address: felt252,
+        usdc_max: felt252,
+        usdc_extreme: felt252,
+        usdc_large: felt252,
+    }
+    fn owner(ref self: ContractState) -> felt252 {
+        let owner = self.owner.read();
+        owner
+    }
 
-
-@constructor
-func constructor{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-}(_owner_address: felt, _l1_contract_address: felt, amount_usdc_max: felt, amount_usdc_extreme: felt, amount_usdc_large: felt):
-    owner.write(value=_owner_address)
-    l1_contract.write(value=_l1_contract_address)
-    usdc_max.write(value=amount_usdc_max)
-    usdc_extreme.write(value=amount_usdc_extreme)
-    usdc_large.write(value=amount_usdc_large)
-    return ()
-end
+    #[constructor]
+    fn constructor(ref self: ContractState, _owner_address: felt, _l1_contract_address: felt, amount_usdc_max: felt, amount_usdc_extreme: felt, amount_usdc_large: felt) {
+        self.owner.write(owner);
+        self.l1_contract.write(_l1_contract_address);
+        self.usdc_max.write(amount_usdc_max);
+        self.usdc_extreme.write(amount_usdc_extreme);
+        selft.usdc_large(amount_usdc_large);
+    } 
+}
